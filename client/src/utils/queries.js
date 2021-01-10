@@ -7,6 +7,13 @@ query me($username: String){
       username
       email
       bookCount
-      savedBooks
+      savedBooks {
+         bookId
+         authors
+         description
+         title
+         image
+         link
+      }
    }
 }`;
