@@ -14,13 +14,16 @@ const SignupForm = () => {
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
+  // mutation to allow the creation of a user,
   const [addUser] = useMutation(ADD_USER);
 
+  // an event handler to track the changes in state for the form data
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
   };
 
+  // an event handler that packages the form data, and creates a new user
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     // check if form has everything (as per react-bootstrap docs)
@@ -31,6 +34,7 @@ const SignupForm = () => {
     }
 
     try {
+      // creates the user
       const { data } = await addUser({
         variables: { ...userFormData }
       });
@@ -41,6 +45,7 @@ const SignupForm = () => {
       setShowAlert(true);
     }
 
+    // clears the form data
     setUserFormData({
       username: '',
       email: '',

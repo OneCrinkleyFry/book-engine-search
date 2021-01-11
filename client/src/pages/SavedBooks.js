@@ -8,21 +8,25 @@ import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
-  
+  // gets the username from the web token.
   const { username } = Auth.getProfile().data;
 
+  // mutation for removing books
   const [removeBook] = useMutation(REMOVE_BOOK);
 
+  // finds the userdata based on the username from the web token
   const { loading, data } = useQuery(QUERY_ME, {
     variables: { username: username }
   });
 
+  // displays this while the profile is still loading.
   if (loading) {
     return <h2>LOADING...</h2>;
   }
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
+    // verifies the token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -30,6 +34,7 @@ const SavedBooks = () => {
     }
 
     try {
+      // removes the book based on the books id
       await removeBook({ variables: { bookId: bookId } });
 
       // upon success, remove book's id from localStorage
