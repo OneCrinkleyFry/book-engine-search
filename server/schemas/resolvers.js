@@ -7,12 +7,12 @@ const resolvers = {
       me: async (parent, { username }) => {
          return User.findOne({ username })
             .select('-__v -password')
-            .populate('savedBooks');
+            .populate('books');
       },
       users: async () => {
          return User.find()
          .select('-__v -password')
-         .populate('savedBooks');
+         .populate('books');
       }
    },
    Mutation: {
@@ -42,10 +42,12 @@ const resolvers = {
          if (context.user) {
             const updatedUser = await User.findOneAndUpdate(
                { _id: context.user._id },
-               { $addToSet: { savedBooks: args } },
-               { new: true }
-            ).populate('books');
-
+               { $addToSet: { savedBooks: { ...args } } },
+               { new: true, runValidators: true }
+            )
+            .select('-__v -password')
+            .populate('books');
+            await console.log(updatedUser);
             return updatedUser;
          }
 
@@ -55,10 +57,12 @@ const resolvers = {
          if (context.user) {
             const updatedUser = await User.findOneAndUpdate(
                { _id: context.user._id },
-               { $addToSet: { savedBooks: bookId } },
+               { $pull: { savedBooks: bookId } },
                { new: true }
-            ).populate('books');
-
+            )
+            .select('-__v -password')
+            .populate('books');
+               
             return updatedUser;
          }
 

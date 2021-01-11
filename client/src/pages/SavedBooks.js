@@ -9,7 +9,7 @@ import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
   
-  const username = Auth.getProfile().data.username;
+  const { username } = Auth.getProfile().data;
 
   const [removeBook] = useMutation(REMOVE_BOOK);
 
