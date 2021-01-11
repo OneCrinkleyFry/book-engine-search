@@ -43,26 +43,26 @@ const resolvers = {
             const updatedUser = await User.findOneAndUpdate(
                { _id: context.user._id },
                { $addToSet: { savedBooks: { ...args } } },
-               { new: true, runValidators: true }
+               { new: true }
             )
             .select('-__v -password')
             .populate('books');
-            await console.log(updatedUser);
             return updatedUser;
          }
 
          throw new AuthenticationError('You need to be logged in!');
       },
       removeBook: async (parent, { bookId }, context) => {
+
          if (context.user) {
             const updatedUser = await User.findOneAndUpdate(
                { _id: context.user._id },
-               { $pull: { savedBooks: bookId } },
+               { $pull: { savedBooks: { bookId: bookId } } },
                { new: true }
             )
             .select('-__v -password')
             .populate('books');
-               
+         
             return updatedUser;
          }
 
@@ -72,3 +72,6 @@ const resolvers = {
 }
 
 module.exports = resolvers;
+
+//Ak7TCwAAQBAJ
+//Ak7TCwAAQBAJ
